@@ -1,4 +1,4 @@
 {
-  "comment": " a test file that can be uploaded to the S# bucket",
+  "comment": "a test file that can be uploaded to the S3 bucket",
   "answer": 42
 }

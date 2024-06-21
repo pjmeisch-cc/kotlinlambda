@@ -3,7 +3,7 @@ plugins {
 }
 
 group = "de.codecentric.pjmeisch"
-version = "1.1-SNAPSHOT"
+version = "1.2.1"
 
 tasks {
     register<Zip>("buildLambdaZip") {
@@ -20,9 +20,6 @@ repositories {
 }
 
 dependencies {
-    implementation("software.amazon.awssdk:s3:2.26.5")
-    implementation("com.amazonaws:aws-lambda-java-events:3.11.6")
-
     implementation(platform("org.http4k:http4k-bom:5.23.0.0"))
     implementation("org.http4k:http4k-aws")
     implementation("org.http4k:http4k-core")
@@ -31,6 +28,11 @@ dependencies {
     implementation("org.http4k:http4k-serverless-lambda")
 
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
+
+    implementation("software.amazon.awssdk:s3:2.26.5")
+    implementation("com.amazonaws:aws-lambda-java-events:3.11.6")
+
+    implementation("org.apache.kafka:kafka-clients:3.7.0")
 
     // we use jackson to log the event and need the jodatime converter for that
     implementation("org.http4k:http4k-format-jackson")
