@@ -19,7 +19,12 @@ val json =
 
 var environment = mutableMapOf<String, String>()
 
-val httpClient = JavaHttpClient()
+val s3 =
+    S3Client
+        .builder()
+        .region(Region.EU_CENTRAL_1)
+        .httpClient(AwsSdkClient(JavaHttpClient()))
+        .build()
 
 fun eventFnHandler() =
     FnHandler { s3Event: S3Event, context: Context ->
@@ -28,21 +33,10 @@ fun eventFnHandler() =
         context.logger.log("s3event:")
         context.logger.log(json.asFormatString(s3Event))
 
-        // download the object from S3
-        val s3 =
-            S3Client
-                .builder()
-                .region(Region.EU_CENTRAL_1)
-                .httpClient(AwsSdkClient(httpClient))
-                .build()
-
         s3Event.records.forEach { record ->
             val objectBytes =
                 s3.getObjectAsBytes { requestBuilder ->
-                    requestBuilder.bucket(record.s3.bucket.name)
-                    requestBuilder
-                        .key(record.s3.`object`.key)
-                        .build()
+                    requestBuilder.bucket(record.s3.bucket.name).key(record.s3.`object`.key)
                 }
             val contentType = objectBytes.response().contentType()
             context.logger.log("content-type: $contentType")
