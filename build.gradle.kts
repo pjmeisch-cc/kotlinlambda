@@ -22,7 +22,7 @@ repositories {
 
 dependencies {
     implementation("com.amazonaws:aws-lambda-java-events:3.11.6")
-    implementation(platform("org.http4k:http4k-bom:5.13.6.1"))
+    implementation(platform("org.http4k:http4k-bom:5.23.0.0"))
     implementation("org.http4k:http4k-aws")
     implementation("org.http4k:http4k-core")
     implementation("org.http4k:http4k-serverless-core")
