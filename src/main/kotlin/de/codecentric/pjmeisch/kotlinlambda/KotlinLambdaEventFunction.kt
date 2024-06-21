@@ -12,13 +12,19 @@ val json = Jackson.apply {
     mapper.registerModule(JodaModule())
 }
 
+var environment = mutableMapOf<String, String>()
+
 fun eventFnHandler() =
     FnHandler { s3Event: S3Event, context: Context ->
+        context.logger.log("env:")
+        context.logger.log(json.asFormatString(environment))
+        context.logger.log("s3event:")
         context.logger.log(json.asFormatString(s3Event))
     }
 
 fun eventFnLoader() =
-    FnLoader { _: Map<String, String> ->
+    FnLoader { env: Map<String, String> ->
+        environment += env
         eventFnHandler()
     }
 
