@@ -30,7 +30,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
     // we use jackson to log the event and need the jodatime converter for that
     implementation("org.http4k:http4k-format-jackson")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.16.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.17.1")
 
     testImplementation(kotlin("test"))
 }
