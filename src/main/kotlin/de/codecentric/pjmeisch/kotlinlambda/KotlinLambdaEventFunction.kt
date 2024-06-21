@@ -65,8 +65,8 @@ private fun log(
     context.logger.log("environment:")
     context.logger.log(
         json.asFormatString(
-            environment.mapValues { (_, value) ->
-                if (value.startsWith("KAFKA_")) "*****" else value
+            environment.mapValues { (key, value) ->
+                if (key.startsWith("KAFKA_")) "*****" else value
             },
         ),
     )
