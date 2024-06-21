@@ -1,5 +1,5 @@
 plugins {
-    kotlin("jvm") version "1.9.22"
+    kotlin("jvm") version "1.9.24"
 }
 
 group = "de.codecentric.pjmeisch"
@@ -28,7 +28,7 @@ dependencies {
     implementation("org.http4k:http4k-serverless-core")
     implementation("org.http4k:http4k-serverless-lambda-runtime")
     implementation("org.http4k:http4k-serverless-lambda")
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.22")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:1.9.24")
     // we use jackson to log the event and need the jodatime converter for that
     implementation("org.http4k:http4k-format-jackson")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.16.1")
