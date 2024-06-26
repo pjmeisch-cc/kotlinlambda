@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.http4k:http4k-bom:5.23.0.0"))
+    implementation(platform("org.http4k:http4k-bom:5.24.0.0"))
     implementation("org.http4k:http4k-aws")
     implementation("org.http4k:http4k-core")
     implementation("org.http4k:http4k-serverless-core")
