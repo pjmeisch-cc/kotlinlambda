@@ -20,22 +20,15 @@ repositories {
 }
 
 dependencies {
-    implementation(platform("org.http4k:http4k-bom:5.24.0.0"))
-    implementation("org.http4k:http4k-aws")
-    implementation("org.http4k:http4k-core")
-    implementation("org.http4k:http4k-serverless-core")
-    implementation("org.http4k:http4k-serverless-lambda-runtime")
-    implementation("org.http4k:http4k-serverless-lambda")
-
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
-
-    implementation("software.amazon.awssdk:s3:2.26.11")
+    implementation("com.amazonaws:aws-lambda-java-core:1.2.3")
     implementation("com.amazonaws:aws-lambda-java-events:3.11.6")
+    implementation("software.amazon.awssdk:apache-client:2.26.11")
+    implementation("software.amazon.awssdk:s3:2.26.11")
 
     implementation("org.apache.kafka:kafka-clients:3.7.0")
 
     // we use jackson to log the event and need the jodatime converter for that
-    implementation("org.http4k:http4k-format-jackson")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.17.1")
 
     testImplementation(kotlin("test"))

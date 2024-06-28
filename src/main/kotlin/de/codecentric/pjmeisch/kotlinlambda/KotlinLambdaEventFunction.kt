@@ -1,21 +1,18 @@
 package de.codecentric.pjmeisch.kotlinlambda
 
 import com.amazonaws.services.lambda.runtime.Context
+import com.amazonaws.services.lambda.runtime.RequestHandler
 import com.amazonaws.services.lambda.runtime.events.S3Event
 import com.amazonaws.services.lambda.runtime.events.models.s3.S3EventNotification
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.joda.JodaModule
-import org.http4k.aws.AwsSdkClient
-import org.http4k.client.JavaHttpClient
-import org.http4k.format.Jackson
-import org.http4k.serverless.AwsLambdaEventFunction
-import org.http4k.serverless.FnHandler
-import org.http4k.serverless.FnLoader
+import software.amazon.awssdk.http.apache.ApacheHttpClient
 import software.amazon.awssdk.regions.Region
 import software.amazon.awssdk.services.s3.S3Client
 
 val json =
-    Jackson.apply {
-        mapper.registerModule(JodaModule())
+    ObjectMapper().apply {
+        registerModule(JodaModule())
     }
 
 var environment = mutableMapOf<String, String>()
@@ -24,10 +21,10 @@ fun <K, V> MutableMap<K, out V>.getOrThrow(key: K): V = get(key) ?: throw Illega
 
 val kafkaProducer: KafkaProducer by lazy {
     KafkaProducer(
-        bootstrapServers = environment.getOrThrow("KAFKA_BOOTSTRAPSERVERS"),
-        username = environment.getOrThrow("KAFKA_USERNAME"),
-        password = environment.getOrThrow("KAFKA_PASSWORD"),
-        topic = environment.getOrThrow("KAFKA_TOPIC"),
+        bootstrapServers = System.getenv().getOrThrow("KAFKA_BOOTSTRAPSERVERS"),
+        username = System.getenv().getOrThrow("KAFKA_USERNAME"),
+        password = System.getenv().getOrThrow("KAFKA_PASSWORD"),
+        topic = System.getenv().getOrThrow("KAFKA_TOPIC"),
     )
 }
 
@@ -35,14 +32,8 @@ val s3 =
     S3Client
         .builder()
         .region(Region.EU_CENTRAL_1)
-        .httpClient(AwsSdkClient(JavaHttpClient()))
+        .httpClient(ApacheHttpClient.builder().build())
         .build()
-
-fun eventFnHandler() =
-    FnHandler { s3Event: S3Event, context: Context ->
-        log(context, s3Event)
-        s3Event.records.forEach { processS3Record(it, context) }
-    }
 
 private fun processS3Record(
     record: S3EventNotification.S3EventNotificationRecord,
@@ -64,20 +55,23 @@ private fun log(
 ) {
     context.logger.log("environment:")
     context.logger.log(
-        json.asFormatString(
+        json.writeValueAsString(
             environment.mapValues { (key, value) ->
                 if (key.startsWith("KAFKA_")) "*****" else value
             },
         ),
     )
     context.logger.log("s3event:")
-    context.logger.log(json.asFormatString(s3Event))
+    context.logger.log(json.writeValueAsString(s3Event))
 }
 
-fun eventFnLoader() =
-    FnLoader { env: Map<String, String> ->
-        environment += env
-        eventFnHandler()
+class KotlinLambdaEventFunction : RequestHandler<S3Event?, String?> {
+    override fun handleRequest(
+        s3Event: S3Event?,
+        context: Context?,
+    ): String {
+        log(context!!, s3Event!!)
+        s3Event.records.forEach { processS3Record(it, context) }
+        return "ok"
     }
-
-class KotlinLambdaEventFunction : AwsLambdaEventFunction(eventFnLoader())
+}
