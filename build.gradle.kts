@@ -30,7 +30,7 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
 
     implementation("software.amazon.awssdk:s3:2.26.11")
-    implementation("com.amazonaws:aws-lambda-java-events:3.11.6")
+    implementation("com.amazonaws:aws-lambda-java-events:3.13.0")
 
     implementation("org.apache.kafka:kafka-clients:3.7.0")
 
