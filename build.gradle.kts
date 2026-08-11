@@ -27,7 +27,7 @@ dependencies {
     implementation("org.http4k:http4k-serverless-lambda-runtime")
     implementation("org.http4k:http4k-serverless-lambda")
 
-    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.0.0")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.4.10")
 
     implementation("software.amazon.awssdk:s3:2.26.11")
     implementation("com.amazonaws:aws-lambda-java-events:3.11.6")
